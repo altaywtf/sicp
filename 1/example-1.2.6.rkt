@@ -11,12 +11,12 @@
   (find-divisor n 2))
 
 (define (divides? divisor n)
-  (= 0 (remainder n divisor)))
+  (= (remainder n divisor) 0))
 
 (define (find-divisor n test-divisor)
   (cond ((> (square test-divisor) n) n)
         ((divides? test-divisor n) test-divisor)
-        (find-divisor n (+ 1 test-divisor))))
+        (else (find-divisor n (+ 1 test-divisor)))))
 
 (define (is-prime? n)
   (= (smallest-divisor n) n))
