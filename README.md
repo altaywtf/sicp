@@ -1,4 +1,1 @@
-# SICP
-
-Exercises from SICP 2nd Edition
-
+![](https://i.ytimg.com/vi/a0YrCABCOEY/maxresdefault.jpg)
