@@ -1,5 +1,6 @@
 #lang sicp
 
+; ex-1.26: inspect expmod implementation that uses explicit squaring
 (define (is-even? x)
   (= 0 (remainder x 2)))
 
