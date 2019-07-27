@@ -5,13 +5,11 @@
 
 (define (cont-frac-iter n d k)
   (define (iter i result)
-    (if (> i k)
+    (if (= i 0)
         result
-        (iter
-         (+ i 1)
-         (/ (n i) (+ (d i) result)))))
+        (iter (- i 1) (/ (n i) (+ (d i) result)))))
 
-  (iter 1 0))
+  (iter k 0))
 
 
 ; cont-frac-iter for 4
