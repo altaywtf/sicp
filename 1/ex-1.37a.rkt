@@ -15,8 +15,8 @@
 ; k -> 1
 (define (cont-frac-t n d k)
   (if (= k 1)
-      1
-      (/ 1 (+ (/ (n k) (d k)) (cont-frac n d (- k 1))))))
+      (/ (n k) (d k))
+      (/ 1 (+ (/ (n k) (d k)) (cont-frac-t n d (- k 1))))))
 
 
 ; cont-frac for 4
@@ -25,6 +25,14 @@
 
 (cont-frac-t
  (lambda (i) 1.0) (lambda (i) 1.0) 4) ; -> 0.6000000000000001
+
+
+; cont-frac for 1000
+(cont-frac
+ (lambda (i) 1.0) (lambda (i) 1.0) 1000) ; -> 0.6180339887498948
+
+(cont-frac-t
+ (lambda (i) 1.0) (lambda (i) 1.0) 1000) ; -> 0.6180339887498948
 
 
 ; find-best-k
