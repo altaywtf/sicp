@@ -3,6 +3,8 @@
 ; ex-1.43: 'repeated' higher-order-prodecure
 
 (define (square x) (* x x))
+
+; from ex-1.42
 (define (compose f g) (lambda (x) (f (g x))))
 
 (define (repeated f times)
