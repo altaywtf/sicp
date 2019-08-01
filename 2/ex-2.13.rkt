@@ -1,6 +1,6 @@
 #lang sicp
 
-; ex-2.13: show the correalation between the tolerance of two intervals and the tolerance of multiplication of two intervals
+; ex-2.13: show the correlation between the tolerance of two intervals and the tolerance of multiplication of two intervals
 
 (define (make-interval a b) (cons a b))
 
