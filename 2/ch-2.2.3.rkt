@@ -35,3 +35,6 @@
         (else (append (enumerate-tree (car tree))
                       (enumerate-tree (cdr tree))))))
 
+
+(define (flatmap op sequence)
+  (accumulate append nil (map op sequence)))
