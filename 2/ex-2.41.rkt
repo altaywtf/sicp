@@ -25,24 +25,15 @@
       (cons low (enumarate-interval (+ low 1) high))))
 
 
-; unique-pairs
-(define (unique-pairs n)
+; unique-triplets
+(define (unique-triplets n)
   (flatmap
    (lambda (i)
-     (map (lambda (j) (list i j))
-          (enumarate-interval 1 (- i 1))))
-   (enumarate-interval 1 n)))
-
-; unque-triplets (TEMP)
-(define (unique-triplets n)
-  (accumulate
-   (lambda (x y)
-     (let ((pairs (unique-pairs (- x 1))))
-       (if (null? pairs)
-           y
-           (append
-            (map (lambda (pair) (append (list x) pair)) pairs) y))))
-   nil
+     (flatmap
+      (lambda (j)
+        (map (lambda (k) (list i j k))
+             (enumarate-interval 1 (- j 1))))
+      (enumarate-interval 1 (- i 1))))
    (enumarate-interval 1 n)))
 
 
@@ -56,5 +47,6 @@
 
 
 ; test
-(find-ordered-triplets-sum-to 5 7)
-(find-ordered-triplets-sum-to 6 10)
+(find-ordered-triplets-sum-to 5 7)  ; ((4 2 1))
+(find-ordered-triplets-sum-to 6 10) ; ((5 3 2) (5 4 1) (6 3 1))
+
