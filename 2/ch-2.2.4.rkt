@@ -2,6 +2,10 @@
 
 ; ch-2.2.4 -> example: a picture language
 
+; compose from ex-1.42
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
 (define (display-wave wave)
   (newline)
   (display wave)
@@ -9,20 +13,24 @@
 
 (define wave "w")
 
+
 ; flip
 (define (flip-vert painter) (string-append "f-v-" painter))
 (define (flip-horiz painter) (string-append "f-h-" painter))
 
+
+; rotate180
+(define (rotate180)
+  (compose flip-vert flip-horiz))
+
+
 ; beside
 (define (beside p1 p2) (string-append "|" p1 "|" p2 "|"))
+
 
 ; below
 (define (below p1 p2) (string-append p1 " / " p2))
 
-; flipped-pairs
-(define (flipped-pairs painter)
-  (let ((flipped-painter (beside painter (flip-vert painter))))
-    (below flipped-painter flipped-painter)))
 
 ; right-split
 (define (right-split painter n)
@@ -31,12 +39,14 @@
       (let ((smaller (right-split painter (- n 1))))
         (beside painter (below smaller smaller)))))
 
+
 ; up-split
 (define (up-split painter n)
   (if (= n 0)
       painter
       (let ((smaller (up-split painter (- n 1))))
         (below (beside smaller smaller) painter))))
+
 
 ; corner-split
 (define (corner-split painter n)
@@ -50,10 +60,32 @@
            (below top-left painter)
            (below corner bottom-right))))))
 
-; square-limit
+
+; higher-order-procedure for abstracting procedures like square-limit, corner-split, flipped pairs
+(define (square-of-four top-left top-right bottom-left bottom-right)
+  (lambda (painter)
+    (let ((top (beside (top-left painter) (top-right painter)))
+          (bottom (beside (bottom-left painter) (bottom-right painter))))
+      (below top bottom))))
+
+#|
+(define (flipped-pairs painter)
+  (let ((flipped-painter (beside painter (flip-vert painter))))
+    (below flipped-painter flipped-painter)))
+|#
+
+(define (flipped-pairs painter)
+  (let ((combine4 (square-of-four identity flip-vert identity flip-vert)))
+    (combine4 painter)))
+
+#|
 (define (square-limit painter n)
   (let ((quarter (corner-split painter n)))
     (let ((half (beside quarter quarter)))
       (below (flip-vert half) half))))
+|#
 
-(square-limit wave 1)
+(define (square-limit painter n)
+  (let ((combine4 (square-of-four flip-horiz identity rotate180 flip-vert)))
+    (combine4 (corner-split painter n))))
+
