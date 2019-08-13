@@ -1,9 +1,16 @@
 #lang sicp
 
-; ch-2.2.4
+; ch-2.2.4: a picture language
 
 (define (compose f g)
   (lambda (x) (f (g x))))
+
+(define (for-each fn items)
+  (if (null? items)
+      (newline)
+      (let ()
+        (fn (car items))
+        (for-each fn (cdr items)))))
 
 ; flip
 (define (flip-vert painter) (string-append "f-v-" painter))
@@ -64,3 +71,76 @@
 (define (square-limit painter n)
   (let ((combine4 (square-of-four flip-horiz identity rotate180 flip-vert)))
     (combine4 (corner-split painter n))))
+
+
+; vector procedures from ex-2.46
+(define (make-vect x y) (cons x y))
+(define (xcor-vect v) (car v))
+(define (ycor-vect v) (cdr v))
+
+(define (add-vect v1 v2)
+  (make-vect
+   (+ (xcor-vect v1) (xcor-vect v2))
+   (+ (ycor-vect v1) (ycor-vect v2))))
+
+(define (sub-vect v1 v2)
+  (make-vect
+   (- (xcor-vect v1) (xcor-vect v2))
+   (- (ycor-vect v1) (ycor-vect v2))))
+
+(define (scale-vect s v1)
+  (make-vect
+   (* s (xcor-vect v1))
+   (* s (ycor-vect v1))))
+
+
+; frame procedures from ex-2.47
+(define (make-frame origin edge1 edge2)
+  (list origin edge1 edge2))
+
+(define (origin-frame f) (car f))
+
+(define (edge1-frame f) (cadr f))
+
+(define (edge2-frame f) (caddr f))
+
+
+; frame-coordinate-mapper
+(define (frame-coord-map frame)
+  (lambda (vector)
+    (add-vect
+     (origin-frame frame)
+     (add-vect
+      (scale-vect (xcor-vect vector) (edge1-frame frame))
+      (scale-vect (ycor-vect vector) (edge2-frame frame))))))
+
+
+; segment procedures from ex-2.48
+(define (make-segment start-vector end-vector)
+  (cons start-vector end-vector))
+
+(define (start-segment segment)
+  (car segment))
+
+(define (end-segment segment)
+  (cdr segment))
+
+
+; dummy draw-line
+(define (draw-line start-v end-v)
+  (display "line from ")
+  (display start-v)
+  (display " to ")
+  (display end-v)
+  (newline))
+
+
+; segments -> painter
+(define (segments->painter segment-list)
+  (lambda (frame)
+    (for-each
+     (lambda (segment)
+       (draw-line
+        ((frame-coord-map frame) (start-segment segment))
+        ((frame-coord-map frame) (end-segment segment))))
+     segment-list)))
