@@ -6,7 +6,7 @@
   (list origin edge1 edge2))
 
 (define (origin-frame f)
-  (car frame))
+  (car f))
 
 (define (edge1-frame f)
   (cadr f))
