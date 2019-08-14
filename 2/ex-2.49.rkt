@@ -156,4 +156,26 @@
    (make-segment (make-vect 1 1) (make-vect 1 0))
    (make-segment (make-vect 1 1) (make-vect 0 1))))
 
-((segments->painter segments-a) target-frame)
+(define painter-a (segments->painter segments-a))
+(painter-a target-frame)
+
+; b. the painter that draws x
+(define segments-b
+  (list
+   (make-segment (make-vect 0 0) (make-vect 1 1))
+   (make-segment (make-vect 0 1) (make-vect 1 0))))
+
+(define painter-b (segments->painter segments-b))
+(painter-b target-frame)
+
+; c. the painter that draws a diamon shape by connecting the midpoints of the frame
+(define segments-c
+  (list
+   (make-segment (make-vect 0.5 0) (make-vect 1 0.5))
+   (make-segment (make-vect 1 0.5) (make-vect 0.5 1))
+   (make-segment (make-vect 0.5 1) (make-vect 0 0.5))
+   (make-segment (make-vect 0 0.5) (make-vect 0.5 0))))
+
+(define painter-c (segments->painter segments-c))
+(painter-c target-frame)
+
