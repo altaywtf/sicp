@@ -57,23 +57,53 @@
    (pair? x)
    (eq? (car x) '*)))
 
+; exponentiation
+(define (make-exponentiation base exponent)
+  (cond
+    ((=number? exponent 0) 1)
+    ((=number? exponent 1) base)
+    ((and (number? base) (number? exponent)) (expt base exponent))
+    (else (list '** base exponent))))
+
+(define (exponentiation? exp)
+  (and
+   (pair? exp)
+   (eq? (car exp) '**)))
+
+(define (base expt-exp)
+  (cadr expt-exp))
+
+(define (exponent expt-exp)
+  (caddr expt-exp))
+
 ; derivative
 (define (deriv exp var)
   (cond ((number? exp) 0)
+
         ((variable? exp)
          (if (same-variable? exp var) 1 0))
+
         ((sum? exp)
          (make-sum (deriv (addend exp) var)
                    (deriv (augend exp) var)))
+        
         ((product? exp)
          (make-sum
           (make-product (multiplier exp)
                         (deriv (multiplicand exp) var))
           (make-product (deriv (multiplier exp) var)
                         (multiplicand exp))))
+
+        ((exponentiation? exp)
+         (make-product
+          (make-product
+           (exponent exp)
+           (make-exponentiation (base exp) (- (exponent exp) 1)))
+          (deriv (base exp) var)))
+        
         (else
          (error "unkonwn expression type -- DERIV" exp))))
 
 (deriv '(+ x 3) 'x) ; 1
-(deriv '(* x y) 'x) ; y
+(deriv '(** x 2) 'x) ; (* 2 x)
 (deriv '(* (* x y) (+ x 3)) 'x) ; (+ (* x y) (* y (+ x 3)))
