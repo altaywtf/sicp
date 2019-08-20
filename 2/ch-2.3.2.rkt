@@ -98,7 +98,7 @@
          (make-product
           (make-product
            (exponent exp)
-           (make-exponentiation (base exp) (- (exponent exp) 1)))
+           (make-exponentiation (base exp) (make-sum (exponent exp) -1)))
           (deriv (base exp) var)))
         
         (else
@@ -106,4 +106,5 @@
 
 (deriv '(+ x 3) 'x) ; 1
 (deriv '(** x 2) 'x) ; (* 2 x)
+(deriv '(+ (** x 2) (* y x)) 'x) ; (+ (* 2 x) y)
 (deriv '(* (* x y) (+ x 3)) 'x) ; (+ (* x y) (* y (+ x 3)))
