@@ -23,3 +23,11 @@
         (intersection-set (cdr set1) set2))
        (else
         (intersection-set set1 (cdr set2)))))))       
+
+(define (adjoin-set x set)
+  (cond
+    ((null? set) (list x))
+    ((= x (car set)) set)
+    ((< x (car set)) (cons x set))
+    (else
+     (cons (car set) (adjoin-set x (cdr set))))))
