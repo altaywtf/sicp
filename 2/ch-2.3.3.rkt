@@ -2,7 +2,7 @@
 
 ; ch-2.3.3: example -> representing sets
 
-; -> sets as ordered lists
+; -> sets as lists
 
 (define (element-of-set? x set)
   (cond
