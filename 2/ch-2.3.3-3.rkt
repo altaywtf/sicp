@@ -39,12 +39,3 @@
       (entry set)
       (left-branch set)
       (adjoin-set x (right-branch set))))))
-
-(define my-set
-  (make-tree
-   2
-   (make-tree 1 '() '())
-   (make-tree 3 '() '())))
-
-(element-of-set? 1 my-set)
-(entry (right-branch (right-branch (adjoin-set 4 my-set))))
