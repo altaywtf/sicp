@@ -65,3 +65,20 @@
 
   (decode-1-iter bits tree))
 
+
+; adjoin
+(define (adjoin-set leaf set)
+  (cond
+    ((null? set) (list leaf))
+    ((< (weight leaf) (weight (car set))) (cons leaf set))
+    (else (cons (car set) (adjoin-set leaf (cdr set))))))
+
+
+; make-leaf-set -> takes pairs and creates ordered set of leaves
+(define (make-leaf-set pairs)
+  (if (null? pairs)
+      '()
+      (let ((pair (car pairs)))
+        (adjoin-set
+         (make-leaf (car pair) (cadr pair))
+         (make-leaf-set (cdr pairs))))))
