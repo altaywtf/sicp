@@ -1,6 +1,6 @@
 #lang sicp
 
-; ch-2.3.4: representing huffman encoding trees
+; ex-2.67: decode sample message
 
 ; leaf {'leaf symbol weight}
 (define (make-leaf symbol weight)
@@ -15,7 +15,6 @@
 (define (weight-leaf leaf)
   (caddr leaf))
 
-
 ; code tree -> {left-branch, right-branch, symbols, weight}
 (define (make-code-tree left-branch right-branch)
   (list
@@ -25,9 +24,8 @@
     (symbols left-branch)
     (symbols right-branch))
    (+
-    (weight left-branch))
-    (weight right-branch)))
-
+    (weight left-branch)
+    (weight right-branch))))
 
 ; selectors
 (define (left-branch tree)
@@ -45,7 +43,6 @@
   (if (leaf? object)
       (weight-leaf object)
       (cadddr object)))
-
 
 ; decoding
 (define (decode bits tree)
@@ -66,19 +63,13 @@
   (decode-1-iter bits tree))
 
 
-; adjoin
-(define (adjoin-set leaf set)
-  (cond
-    ((null? set) (list leaf))
-    ((< (weight leaf) (weight (car set))) (cons leaf set))
-    (else (cons (car set) (adjoin-set leaf (cdr set))))))
+; solution
+(define sample-tree
+  (make-code-tree (make-leaf 'A 4)
+                  (make-code-tree
+                   (make-leaf 'B 2)
+                   (make-code-tree (make-leaf 'D 1) (make-leaf 'C 1)))))
 
+(define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
 
-; make-leaf-set -> takes pairs and creates ordered set of leaves
-(define (make-leaf-set pairs)
-  (if (null? pairs)
-      '()
-      (let ((pair (car pairs)))
-        (adjoin-set
-         (make-leaf (car pair) (cadr pair))
-         (make-leaf-set (cdr pairs))))))
+(decode sample-message sample-tree) ; (A D A B B C A)
