@@ -1,4 +1,5 @@
-#lang sicp
+#lang racket
+(provide (all-defined-out))
 
 ; ch-2.3.4: representing huffman encoding trees
 
