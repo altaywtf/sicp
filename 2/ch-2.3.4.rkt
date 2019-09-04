@@ -83,3 +83,47 @@
         (adjoin-set
          (make-leaf (car pair) (cadr pair))
          (make-leaf-set (cdr pairs))))))
+
+
+; encoding (ex-2.68)
+(define (encode-symbol symbol tree)
+  (define (element-of-set? x set)
+    (cond
+      ((null? set) false)
+      ((eq? (car set) x) true)
+      (else (element-of-set? x (cdr set)))))
+  
+  (define (search-symbol t result)
+    (cond
+     ((leaf? t)
+      result)
+     ((eq? (symbol-leaf (left-branch t)) symbol)
+      (cons '0 result))
+     (else
+      (cons '1 (search-symbol (right-branch t) result)))))
+
+  (if (element-of-set? symbol (symbols tree))
+      (search-symbol tree '())
+      (error "bad symbol -> " symbol)))
+
+(define (encode message tree)
+  (if
+   (null? message)
+   '()
+   (append (encode-symbol (car message) tree)
+           (encode (cdr message) tree))))
+
+
+; generate-huffman-tree from pairs (ex-2.69)
+(define (successive-merge leaf-set)
+  (if
+   (null? (cdr leaf-set))
+   (car leaf-set)
+   (successive-merge
+    (adjoin-set
+     (make-code-tree (cadr leaf-set) (car leaf-set))
+     (cddr leaf-set)))))
+
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
+
