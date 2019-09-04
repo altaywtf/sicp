@@ -93,17 +93,16 @@
       ((eq? (car set) x) true)
       (else (element-of-set? x (cdr set)))))
   
-  (define (search-symbol t result)
+  (define (search-symbol symbol tree)
     (cond
-     ((leaf? t)
-      result)
-     ((eq? (symbol-leaf (left-branch t)) symbol)
-      (cons '0 result))
+     ((leaf? tree) '())
+     ((element-of-set? symbol (symbols (left-branch tree)))
+      (cons '0 (encode-symbol symbol (left-branch tree))))
      (else
-      (cons '1 (search-symbol (right-branch t) result)))))
+      (cons '1 (encode-symbol symbol (right-branch tree))))))
 
   (if (element-of-set? symbol (symbols tree))
-      (search-symbol tree '())
+      (search-symbol symbol tree)
       (error "bad symbol -> " symbol)))
 
 (define (encode message tree)
