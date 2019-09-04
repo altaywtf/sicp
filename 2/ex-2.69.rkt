@@ -11,7 +11,14 @@
    (make-code-tree
     (make-leaf 'B 2)
     (make-code-tree
-     (make-leaf 'C 1)
-     (make-leaf 'D 1)))))
+     (make-leaf 'D 1)
+     (make-leaf 'C 1)))))
 
-(equal? (generate-huffman-tree sample-pairs) sample-tree)
+(define tree (generate-huffman-tree sample-pairs))
+
+tree
+(newline)
+sample-tree
+(newline)
+
+(equal? tree sample-tree)
