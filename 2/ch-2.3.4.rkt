@@ -26,8 +26,8 @@
     (symbols left-branch)
     (symbols right-branch))
    (+
-    (weight left-branch))
-    (weight right-branch)))
+    (weight left-branch)
+    (weight right-branch))))
 
 
 ; selectors
@@ -117,11 +117,11 @@
 ; generate-huffman-tree from pairs (ex-2.69)
 (define (successive-merge leaf-set)
   (if
-   (null? (cdr leaf-set))
+   (= (length leaf-set) 1)
    (car leaf-set)
    (successive-merge
     (adjoin-set
-     (make-code-tree (cadr leaf-set) (car leaf-set))
+     (make-code-tree (car leaf-set) (cadr leaf-set))
      (cddr leaf-set)))))
 
 (define (generate-huffman-tree pairs)
