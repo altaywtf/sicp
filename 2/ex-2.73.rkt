@@ -1,49 +1,63 @@
 #lang racket
 (require "./ex-2.73-lookup-extension.rkt")
+(require "./ch-2.3.2.rkt")
 
 ; ex-2.73: symbolic differentiation with generic deriv
 
-; helpers
-(define (=number? exp num)
-  (and
-   (number? exp)
-   (= exp num)))
+; a -> number? and same-variable? are predicates. nothing to dispatch.
 
-(define (variable? e)
-  (symbol? e))
-
-(define (same-variable? v1 v2)
-  (and
-   (variable? v1)
-   (variable? v2)
-   (eq? v1 v2)))
-
-(define (operator exp) (car exp))
-(define (operands exp) (cdr exp))
-
-; sum-package
+; b -> sum-package
 (define (install-sum-package)
-  (define (make-sum a1 a2)
-    (cond
-      ((=number? a1 0) a2)
-      ((=number? a2 0) a1)
-      ((and (number? a1) (number? a2)) (+ a1 a2))
-      (else (list '+ a1 a2))))
-
   (define (addend operands) (car operands))
   (define (augend operands) (cadr operands))
   
   (define (deriv-sum operands var)
-    (make-sum (deriv (car operands) var)
-              (deriv (cadr operands) var)))
+    (make-sum (deriv (addend operands) var)
+              (deriv (augend operands) var)))
   
-  (put 'deriv '+ deriv-sum)
-  
-  'sum-package-installed)
+  (put 'deriv '+ deriv-sum))
 
+
+; b -> product-package
+(define (install-product-package)
+  (define (multiplier operands) (car operands))
+  (define (multiplicand operands) (cadr operands))
+
+  (define (deriv-product operands var)
+    (make-sum
+     (make-product (multiplier operands)
+                   (deriv (multiplicand operands) var))
+     (make-product (deriv (multiplier operands) var)
+                   (multiplicand operands))))
+
+  (put 'deriv '* deriv-product))
+
+
+; c -> exp-package
+(define (install-exp-package)
+  (define (base operands) (car operands))
+  (define (exponent operands) (cadr operands))
+  
+  (define (make-exponentiation base exponent)
+    (cond
+      ((=number? exponent 0) 1)
+      ((=number? exponent 1) base)
+      ((and (number? base) (number? exponent)) (expt base exponent))
+      (else (list '** base exponent))))
+
+  (define (deriv-exp operands var)
+    (make-product
+     (make-product (exponent operands)
+                   (make-exponentiation (base operands) (make-sum (exponent operands) -1)))
+     (deriv (base operands) var)))
+
+  (put 'deriv '** deriv-exp))
+
+
+;;;
 (install-sum-package)
-
-
+(install-product-package)
+(install-exp-package)
 
 (define (deriv exp var)
   (cond ((number? exp) 0)
@@ -51,38 +65,8 @@
         (else ((get 'deriv (operator exp)) (operands exp) var))))
 
 
-; derivative
-#|
-(define (deriv exp var)
-  (cond ((number? exp) 0)
-
-        ((variable? exp)
-         (if (same-variable? exp var) 1 0))
-
-        ((sum? exp)
-         (make-sum (deriv (addend exp) var)
-                   (deriv (augend exp) var)))
-        
-        ((product? exp)
-         (make-sum
-          (make-product (multiplier exp)
-                        (deriv (multiplicand exp) var))
-          (make-product (deriv (multiplier exp) var)
-                        (multiplicand exp))))
-
-        ((exponentiation? exp)
-         (make-product
-          (make-product
-           (exponent exp)
-           (make-exponentiation (base exp) (make-sum (exponent exp) -1)))
-          (deriv (base exp) var)))
-        
-        (else
-         (error "unkonwn expression type -- DERIV" exp))))
-|#
-
+; examples
 (deriv '(+ x 3) 'x) ; 1
-; (deriv '(** x 2) 'x) ; (* 2 x)
-; (deriv '(+ (** x 2) (* y x)) 'x) ; (+ (* 2 x) y)
-; (deriv '(* (* x y) (+ x 3)) 'x) ; (+ (* x y) (* y (+ x 3)))
-
+(deriv '(** x 2) 'x) ; (* 2 x)
+(deriv '(+ (** x 2) (* y x)) 'x) ; (+ (* 2 x) y)
+(deriv '(* (* x y) (+ x 3)) 'x) ; (+ (* x y) (* y (+ x 3)))
