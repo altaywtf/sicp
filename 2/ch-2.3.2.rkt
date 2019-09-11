@@ -1,24 +1,24 @@
-#lang sicp
+#lang racket
 
 ; ch-2.3.2: symbolic differentiation
 
-; helpers
-(define (=number? exp num)
-  (and
-   (number? exp)
-   (= exp num)))
+; deriv-helpers
+(provide =number?)
+(define (=number? exp num) (and (number? exp) (= exp num)))
 
-; variable
-(define (variable? e)
-  (symbol? e))
+(provide operator)
+(define (operator exp) (car exp))
 
-(define (same-variable? v1 v2)
-  (and
-   (variable? v1)
-   (variable? v2)
-   (eq? v1 v2)))
+(provide operands)
+(define (operands exp) (cdr exp))
 
-; sum
+(provide variable?)
+(define (variable? e) (symbol? e))
+
+(provide same-variable?)
+(define (same-variable? v1 v2) (and (variable? v1) (variable? v2) (eq? v1 v2)))
+
+(provide make-sum)
 (define (make-sum a1 a2)
   (cond
     ((=number? a1 0) a2)
@@ -26,18 +26,7 @@
     ((and (number? a1) (number? a2)) (+ a1 a2))
     (else (list '+ a1 a2))))
 
-(define (addend sum-exp)
-  (cadr sum-exp))
-
-(define (augend sum-exp)
-  (caddr sum-exp))
-
-(define (sum? x)
-  (and
-   (pair? x)
-   (eq? (car x) '+)))
-
-; product
+(provide make-product)
 (define (make-product m1 m2)
   (cond
     ((or (=number? m1 0) (=number? m2 0)) 0)
@@ -46,16 +35,15 @@
     ((and (number? m1) (number? m2)) (* m1 m2))
     (else (list '* m1 m2))))
 
-(define (multiplier pro-exp)
-  (cadr pro-exp))
+; sum helpers
+(define (addend sum-exp) (cadr sum-exp))
+(define (augend sum-exp) (caddr sum-exp))
+(define (sum? x) (and (pair? x) (eq? (car x) '+)))
 
-(define (multiplicand pro-exp)
-  (caddr pro-exp))
-
-(define (product? x)
-  (and
-   (pair? x)
-   (eq? (car x) '*)))
+; product helpers
+(define (multiplier pro-exp) (cadr pro-exp))
+(define (multiplicand pro-exp) (caddr pro-exp))
+(define (product? x) (and (pair? x) (eq? (car x) '*)))
 
 ; exponentiation
 (define (make-exponentiation base exponent)
@@ -104,7 +92,10 @@
         (else
          (error "unkonwn expression type -- DERIV" exp))))
 
-(deriv '(+ x 3) 'x) ; 1
-(deriv '(** x 2) 'x) ; (* 2 x)
-(deriv '(+ (** x 2) (* y x)) 'x) ; (+ (* 2 x) y)
-(deriv '(* (* x y) (+ x 3)) 'x) ; (+ (* x y) (* y (+ x 3)))
+
+#|
+  (deriv '(+ x 3) 'x) ; 1
+  (deriv '(** x 2) 'x) ; (* 2 x)
+  (deriv '(+ (** x 2) (* y x)) 'x) ; (+ (* 2 x) y)
+  (deriv '(* (* x y) (+ x 3)) 'x) ; (+ (* x y) (* y (+ x 3)))
+|#
