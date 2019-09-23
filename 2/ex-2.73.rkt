@@ -1,5 +1,5 @@
 #lang racket
-(require "./ex-2.73-lookup-extension.rkt")
+(require "./ch-2.4.3-lookup-table.rkt")
 (require "./ch-2.3.2.rkt")
 
 ; ex-2.73: symbolic differentiation with generic deriv
