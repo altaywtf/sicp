@@ -4,6 +4,7 @@
 (require "./ch-2.4.3-lookup-table.rkt")
 (require "./ch-2.4.3-polar-complex-number-operations.rkt")
 (require "./ch-2.4.3-rectangular-complex-number-operations.rkt")
+(require "./ch-2.4.3-apply-generic.rkt")
 
 (provide install-complex-package)
 (define (install-complex-package)
@@ -64,5 +65,18 @@
   (put 'make-from-mag-ang 'complex
        (lambda (r a)
          (tag (make-from-mag-ang r a))))
+
+  ; ex-2.77
+  (put 'real-part '(complex)
+       (lambda (z) (apply-generic 'real-part z)))
+  
+  (put 'imag-part '(complex)
+       (lambda (z) (apply-generic 'imag-part z)))
+
+  (put 'magnitude '(complex)
+       (lambda (z) (apply-generic 'magnitude z)))
+
+  (put 'angle '(complex)
+       (lambda (z) (apply-generic 'angle z)))
 
   'installed-complex-package)
