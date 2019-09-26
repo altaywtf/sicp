@@ -49,4 +49,9 @@
   (put 'make 'rational
        (lambda (n d) (tag (make-rat n d))))
 
+  ; ex-2.79
+  (put 'equ? '(rational rational)
+       (lambda (x y)
+         (and (eq? (numer x) (numer y)) (eq? (denom x) (denom y)))))
+
   'installed-rational-package)

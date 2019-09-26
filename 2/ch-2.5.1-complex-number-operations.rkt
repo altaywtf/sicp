@@ -79,4 +79,8 @@
   (put 'angle '(complex)
        (lambda (z) (apply-generic 'angle z)))
 
+  ; ex-2.79
+  (put 'equ? '(complex complex)
+       (lambda (z1 z2) (apply-generic 'equ? z1 z2)))
+
   'installed-complex-package)

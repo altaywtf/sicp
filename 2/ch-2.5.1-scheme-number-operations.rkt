@@ -23,4 +23,8 @@
   (put 'div '(scheme-number scheme-number)
        (lambda (x y) (tag (/ x y))))
 
+  ; ex-2.79
+  (put 'equ? '(scheme-number scheme-number)
+       (lambda (x y) (eq? x y)))
+
   'installed-scheme-number-package)

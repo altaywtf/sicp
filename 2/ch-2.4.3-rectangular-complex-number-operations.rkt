@@ -38,4 +38,10 @@
   (put 'make-from-mag-ang 'rectangular
        (lambda (x y) (tag (make-from-mag-ang x y))))
 
+  ; ex-2.79
+  (put 'equ? '(rectangular rectangular)
+       (lambda (z1 z2)
+         (and (eq? (real-part z1) (real-part z2))
+              (eq? (imag-part z1) (imag-part z2))))) 
+
   'installed-rectangular-package)

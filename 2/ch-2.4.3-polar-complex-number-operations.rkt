@@ -38,4 +38,10 @@
   (put 'make-from-mag-ang 'polar
        (lambda (x y) (tag (make-from-mag-ang x y))))
 
+  ; ex-2.79
+  (put 'equ? '(polar polar)
+       (lambda (z1 z2)
+         (and (eq? (magnitude z1) (magnitude z2))
+              (eq? (angle z1) (angle z2)))))
+
   'installed-polar-package)
