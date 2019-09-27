@@ -27,4 +27,8 @@
   (put 'equ? '(scheme-number scheme-number)
        (lambda (x y) (eq? x y)))
 
+  ; ex-2.80
+  (put '=zero? '(scheme-number)
+       (lambda (x) (eq? x 0)))
+
   'installed-scheme-number-package)

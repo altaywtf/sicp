@@ -54,4 +54,8 @@
        (lambda (x y)
          (and (eq? (numer x) (numer y)) (eq? (denom x) (denom y)))))
 
+  ; ex-2.80
+  (put '=zero? '(rational)
+       (lambda (x) (eq? (numer x) 0)))
+
   'installed-rational-package)

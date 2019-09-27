@@ -83,4 +83,9 @@
   (put 'equ? '(complex complex)
        (lambda (z1 z2) (apply-generic 'equ? z1 z2)))
 
+  ; ex-2.80
+  (put '=zero? '(complex)
+       (lambda (z)
+         (= (apply-generic 'real-part z) (apply-generic 'imag-part z) 0)))
+
   'installed-complex-package)
