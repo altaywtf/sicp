@@ -31,4 +31,8 @@
   (put '=zero? '(scheme-number)
        (lambda (x) (eq? x 0)))
 
+  ; ex-2.81
+  (put 'exp '(scheme-number scheme-number)
+       (lambda (x y) (tag (expt x y))))
+
   'installed-scheme-number-package)
