@@ -18,6 +18,19 @@
   (define (make-from-mag-ang r a)
     ((get 'make-from-mag-ang 'polar) r a))
 
+  ;; ex-2.77
+  (define (real-part z)
+    (apply-generic 'real-part z))
+
+  (define (imag-part z)
+    (apply-generic 'imag-part z))
+
+  (define (magnitude z)
+    (apply-generic 'magnitude z))
+
+  (define (angle z)
+    (apply-generic 'angle z))
+
   ;; internal procedures
   (define (add-complex z1 z2)
     (make-from-real-imag
@@ -67,17 +80,10 @@
          (tag (make-from-mag-ang r a))))
 
   ; ex-2.77
-  (put 'real-part '(complex)
-       (lambda (z) (apply-generic 'real-part z)))
-  
-  (put 'imag-part '(complex)
-       (lambda (z) (apply-generic 'imag-part z)))
-
-  (put 'magnitude '(complex)
-       (lambda (z) (apply-generic 'magnitude z)))
-
-  (put 'angle '(complex)
-       (lambda (z) (apply-generic 'angle z)))
+  (put 'real-part '(complex) real-part)
+  (put 'imag-part '(complex) imag-part)
+  (put 'magnitude '(complex) magnitude)
+  (put 'angle '(complex) angle)
 
   ; ex-2.79
   (put 'equ? '(complex complex)
