@@ -13,7 +13,7 @@
   x)
 
 
-; has-cycle-naive?
+; has-cycle-naive? -> only checks if the (last-pair x) eq? to x
 (define (has-cycle-naive? x)
   (define (loop tail)
     (cond ((null? tail) false)
@@ -35,11 +35,16 @@
       (loop x)))
 
 ; test
-(define t1 '(a b c))
-(has-cycle-naive? t1)
-(has-cycle-naive? (make-cycle t1))
+(has-cycle-naive? '(a b c)) ; -> f
+(has-cycle? '(a b c))       ; -> f
 
-(define t2 '(a b c))
-(has-cycle? t2)
-(has-cycle? (make-cycle t2))
+(has-cycle? (make-cycle '(a b c))) ; -> t
+(has-cycle-naive? (make-cycle '(a b c))) ; -> t
+
+(define y '(1 2 3 4 5 6 7 8))
+(set-cdr! (cdddr (cddddr y)) (cdddr y))
+
+(has-cycle? y) ;-> t
+; (has-cycle-naive? y) ;-> boom! -> see ex-3.19
+
 
